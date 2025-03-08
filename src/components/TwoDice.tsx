@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-// Function to roll a 6-sided die
 function d6(): number {
     return Math.floor(Math.random() * 6) + 1;
 }
@@ -15,10 +14,14 @@ export function TwoDice(): React.JSX.Element {
 
     const [leftDie, setLeftDie] = useState<number>(initialLeft);
     const [rightDie, setRightDie] = useState<number>(initialRight);
+    const [resultMessage, setResultMessage] = useState<string>("");
 
-    let resultMessage = "";
-    if (leftDie === rightDie) {
-        resultMessage = leftDie === 1 ? "Lose" : "Win";
+    function updateMessage(newLeft: number, newRight: number) {
+        if (newLeft === newRight) {
+            setResultMessage(newLeft === 1 ? "Lose" : "Win");
+        } else {
+            setResultMessage("");
+        }
     }
 
     return (
@@ -30,14 +33,19 @@ export function TwoDice(): React.JSX.Element {
 
             <Button
                 onClick={() => {
-                    setLeftDie(d6());
+                    const newLeft = d6();
+                    setLeftDie(newLeft);
+                    updateMessage(newLeft, rightDie);
                 }}
             >
                 Roll Left
             </Button>
+
             <Button
                 onClick={() => {
-                    setRightDie(d6());
+                    const newRight = d6();
+                    setRightDie(newRight);
+                    updateMessage(leftDie, newRight);
                 }}
             >
                 Roll Right
