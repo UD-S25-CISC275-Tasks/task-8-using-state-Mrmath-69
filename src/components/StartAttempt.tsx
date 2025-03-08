@@ -2,38 +2,37 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
 export function StartAttempt(): React.JSX.Element {
-    const [attempts, setAttempts] = useState<number>(4);
-    const [inProgress, setInProgress] = useState<boolean>(false);
+    const [attempts, setAttempts] = useState<number>(4); // Initial attempts
+    const [isInProgress, setIsInProgress] = useState<boolean>(false); // Quiz not in progress initially
+
+    const startQuiz = () => {
+        if (attempts > 0) {
+            setIsInProgress(true);
+            setAttempts(attempts - 1);
+        }
+    };
+
+    const stopQuiz = () => {
+        setIsInProgress(false);
+    };
+
+    const mulligan = () => {
+        setAttempts(attempts + 1);
+    };
 
     return (
         <div>
-            <p>Attempts Left: {attempts}</p>
-
+            <h3>Attempts left: {attempts}</h3>
             <Button
-                onClick={() => {
-                    setAttempts(attempts - 1);
-                    setInProgress(true);
-                }}
-                disabled={inProgress || attempts === 0}
+                onClick={startQuiz}
+                disabled={isInProgress || attempts === 0}
             >
                 Start Quiz
             </Button>
-
-            <Button
-                onClick={() => {
-                    setInProgress(false);
-                }}
-                disabled={!inProgress}
-            >
+            <Button onClick={stopQuiz} disabled={!isInProgress}>
                 Stop Quiz
             </Button>
-
-            <Button
-                onClick={() => {
-                    setAttempts(attempts + 1);
-                }}
-                disabled={inProgress}
-            >
+            <Button onClick={mulligan} disabled={isInProgress}>
                 Mulligan
             </Button>
         </div>
